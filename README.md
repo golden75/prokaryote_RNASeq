@@ -7,9 +7,9 @@ This repository is a usable, publicly available tutorial for analyzing different
 This tutorial will serve as an introduction to analysis of prokaryote RNASeq data with an associated reference genome. The tools used for this analysis strictly consist of freeware and open-source software - any bioinformatician can perform the following analysis without any licenses!   
 
 <strong>Software download links:</strong>
-
 <a href="https://github.com/ncbi/sra-tools">SRA Toolkit</a>
 <a href="http://www.bioinformatics.babraham.ac.uk/projects/fastqc/">FastQC</a>
+
 <a href="https://github.com/najoshi/sickle">Sickle</a>
 <a href="http://ccb.jhu.edu/software/EDGE-pro/">EDGE-pro</a>
 <a href="http://www.r-project.org/">R</a>
