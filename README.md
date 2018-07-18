@@ -32,3 +32,5 @@ fastq-dump SRR034450
 fastq-dump SRR034451
 fastq-dump SRR034452
 fastq-dump SRR034453</pre>
+
+The converted reads are located in the <code>/UCHC/LABS/CBC/Tutorials/Listeria/raw_data</code>. The script used is located at: <code>/UCHC/LABS/CBC/Tutorials/Listeria/raw_data/sra_download.sh</code>
