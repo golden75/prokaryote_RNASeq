@@ -46,14 +46,10 @@ For more information on using the Xanadu cluster and SLURM please refer to our t
 FastQC can be used to give an impression of the quality of the data before any further analysis such as quality control. We will run FastQC over the command line on just one of the .fastq files for demonstration purposes.
 
 <pre style="color: silver; background: black;">
-#################################################################
-# Quality Check of the Reads
-#################################################################
 module load fastqc/0.11.5
-
-fastqc ../raw_data/SRR034450.fastq
-fastqc ../raw_data/SRR034451.fastq
-fastqc ../raw_data/SRR034452.fastq
-fastqc ../raw_data/SRR034453.fastq
+fastqc --outdir . ../raw_data/SRR034450.fastq
+fastqc --outdir . ../raw_data/SRR034451.fastq
+fastqc --outdir . ../raw_data/SRR034452.fastq
+fastqc --outdir . ../raw_data/SRR034453.fastq
 </pre>
 
