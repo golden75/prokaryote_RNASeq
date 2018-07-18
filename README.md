@@ -6,5 +6,5 @@ This repository is a usable, publicly available tutorial for analyzing different
 # RNASeq Workshop directory
 
 
-# Download raw reads in fastq format: SRA Toolkit
+## Download raw reads in fastq format: SRA Toolkit
 The first step is to retrieve the biological sequence data from the <a href="https://www.ncbi.nlm.nih.gov/sra">Sequence Read Archive</a>. The data that we will be using is from this <a href="https://www.ncbi.nlm.nih.gov/bioproject/PRJNA116667">experiment</a>, which analyzes two strains of Listeria monocytogenes (10403S and DsigB) with two replicates per strain, resulting in a total of four raw read files. We will use the <span style="color: #339966;">fastq-dump</span> utility from the SRA toolkit to download the raw files by accession number into fastq format. This format is necessary because the software used to perform quality control, Sickle, requires fastq files as input.
