@@ -4,7 +4,7 @@ This repository is a usable, publicly available tutorial for analyzing different
 
 
 <h2 id="Header_1">Introduction and programs</h2>
-This tutorial will serve as an introduction to analysis of prokaryote RNASeq data with an associated reference genome. The tools used for this analysis strictly consist of freeware and open-source software - any bioinformatician can perform the following analysis without any licenses!
+This tutorial will serve as an introduction to analysis of prokaryote RNASeq data with an associated reference genome. The tools used for this analysis strictly consist of freeware and open-source software - any bioinformatician can perform the following analysis without any licenses!   
 
 <strong>Software download links:</strong>
 
