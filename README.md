@@ -53,3 +53,8 @@ fastqc --outdir . ../raw_data/SRR034452.fastq
 fastqc --outdir . ../raw_data/SRR034453.fastq
 </pre>
 
+<pre style="color: silver; background: black;">
+fastqc [-o output dir] seqfile1
+
+    -o --outdir     Create all output files in the specified output directory
+</pre>
