@@ -42,7 +42,7 @@ For more information on using the Xanadu cluster and SLURM please refer to our t
 
 
 
-<h2 id="Header_2"> Checking the quality of the reads using FASTQC</h2>
+<h2 id="Header_3"> Checking the quality of the reads using FASTQC</h2>
 FastQC can be used to give an impression of the quality of the data before any further analysis such as quality control. We will run FastQC over the command line on just one of the .fastq files for demonstration purposes.
 
 <pre style="color: silver; background: black;">
@@ -72,3 +72,61 @@ fastqc_raw_data/
 Copy this file to your desktop and open it with a web browser to view the contents, which will contain summary graphs and data such as the 'Per base sequence quality graph' below.
 
 ![](images/SRR034450_PerBaseQuality.png)
+
+
+<h2 id="Header_4"> Sickle: Quality Control on raw reads</h2>
+
+The next step is to perform quality control on the reads using sickle. Since our reads are all unpaired reads, we indicate this with the se option in the sickle command. 
+<pre style="color: silver; background: black;">
+Usage: sickle se [options] -f [fastq sequence file] -t [quality type] -o [trimmed fastq file]
+
+Command:
+se	single-end sequence trimming
+
+Options:
+-f  flag designates the input file 
+-o  output file  
+-q  the minimum quality (sickle defaults to 20) and 
+-l  the minimum read length
+-t  flag designates the type of read</pre> 
+
+Unfortunately, despite the reads being Illumina reads, the average quality did not meet sickle's minimum for Illumina reads, hence the sanger option.
+
+<pre style="color: silver; background: black;">
+module load sickle/1.33
+
+sickle se -f ../raw_data/SRR034450.fastq -t sanger -o SRR034450_trimmed.fastq
+sickle se -f ../raw_data/SRR034451.fastq -t sanger -o SRR034451_trimmed.fastq
+sickle se -f ../raw_data/SRR034452.fastq -t sanger -o SRR034452_trimmed.fastq
+sickle se -f ../raw_data/SRR034453.fastq -t sanger -o SRR034453_trimmed.fastq</pre>
+
+The script is called `sickle_qc.sh` which can be found in `/UCHC/LABS/CBC/Tutorials/Listeria/sickle_quality_control` folder. Following the sickle run it will produce the trimmed read files:
+<pre style="color: silver; background: black;">
+sickle_quality_control/
+├── SRR034450_trimmed.fastq
+├── SRR034451_trimmed.fastq
+├── SRR034452_trimmed.fastq
+└── SRR034453_trimmed.fastq</pre>
+
+
+<h2 id="Header_5"> Checking the quality of the trimmed reads using FASTQC</h2>
+Now we will use the FASTQC tools to check the quality of reads after trimming.
+<pre style="color: silver; background: black;">
+module load fastqc/0.11.5
+
+fastqc --outdir . ../sickle_quality_control/SRR034450_trimmed.fastq
+fastqc --outdir . ../sickle_quality_control/SRR034451_trimmed.fastq
+fastqc --outdir . ../sickle_quality_control/SRR034452_trimmed.fastq
+fastqc --outdir . ../sickle_quality_control/SRR034453_trimmed.fastq</pre>
+
+The above script is called `fastqc_trimmed.sh` and it is located at `/UCHC/LABS/CBC/Tutorials/Listeria/fastqc_trimmed_reads` This will produce the html files with statistics, which can be downloaded and viewed.
+<pre style="color: silver; background: black;">
+fastqc_trimmed_reads
+├── SRR034450_trimmed_fastqc.html
+├── SRR034451_trimmed_fastqc.html
+├── SRR034452_trimmed_fastqc.html
+└── SRR034453_trimmed_fastqc.html</pre>
+
+
+
+
