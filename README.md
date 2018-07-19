@@ -78,6 +78,12 @@ Copy this file to your desktop and open it with a web browser to view the conten
 
 The next step is to perform quality control on the reads using sickle. Since our reads are all unpaired reads, we indicate this with the se option in the sickle command. 
 <pre style="color: silver; background: black;">
+Usage: sickle se [options] -f [fastq sequence file] -t [quality type] -o [trimmed fastq file]
+
+Command:
+se	single-end sequence trimming
+
+Options:
 -f  flag designates the input file 
 -o  output file  
 -q  the minimum quality (sickle defaults to 20) and 
