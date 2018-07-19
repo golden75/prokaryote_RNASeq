@@ -59,6 +59,9 @@ fastqc --outdir . ../raw_data/SRR034452.fastq
 fastqc --outdir . ../raw_data/SRR034453.fastq
 </pre>
 
+
+Once the program finishes running, the output will produce a series of html formatted statistics file with the name<code><span style="color: #339966;">SRR034450_fastqc.html</span></code>. 
+
 <pre style="color: silver; background: black;">
 fastqc_raw_data/
 ├── SRR034450_fastqc.html
@@ -66,4 +69,4 @@ fastqc_raw_data/
 ├── SRR034452_fastqc.html
 └── SRR034453_fastqc.html</pre>
 
-Once the program finishes running, the output will include an html formatted statistics file with the name<span style="color: #339966;"> </span><span class="s1"><code><span style="color: #339966;">SRR034450_fastqc.html</span></code>. Copy this file to your desktop and open it with a web browser to view the contents, which will contain summary graphs and data such as the 'Per base sequence quality graph' below.
+Copy this file to your desktop and open it with a web browser to view the contents, which will contain summary graphs and data such as the 'Per base sequence quality graph' below.
