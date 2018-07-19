@@ -140,3 +140,12 @@ The reference genome is stored in the .fna file, protein table in the .ptt file,
 wget http://genome2d.molgenrug.nl/Bacteria/Listeria_monocytogenes_EGD_e_uid61583/NC_003210.fna
 wget http://genome2d.molgenrug.nl/Bacteria/Listeria_monocytogenes_EGD_e_uid61583/NC_003210.ptt
 wget http://genome2d.molgenrug.nl/Bacteria/Listeria_monocytogenes_EGD_e_uid61583/NC_003210.rnt</pre>
+
+Once downloaded, these files are located in `/UCHC/LABS/CBC/Tutorials/Listeria/reference_genome` folder in Xanadu server.
+<pre style="color: silver; background: black;">
+reference_genome
+├── NC_003210.fna
+├── NC_003210.ptt
+└── NC_003210.rnt</pre>
+
+Now we can run EDGE-pro to generate gene expression levels. The -g option takes a reference genome, -p flag a protein table, -r flag an rnt table, -u flag a fastq file (the trimmed file from sickle). The -o flag will be the prefix before each of the EDGE-pro output files, and the -s flag is the directory where the EDGE-pro executables are located.
