@@ -70,3 +70,5 @@ fastqc_raw_data/
 └── SRR034453_fastqc.html</pre>
 
 Copy this file to your desktop and open it with a web browser to view the contents, which will contain summary graphs and data such as the 'Per base sequence quality graph' below.
+
+![](images/SRR034450_PerBaseQuality.png)
