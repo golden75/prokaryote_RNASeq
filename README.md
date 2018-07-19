@@ -72,3 +72,16 @@ fastqc_raw_data/
 Copy this file to your desktop and open it with a web browser to view the contents, which will contain summary graphs and data such as the 'Per base sequence quality graph' below.
 
 ![](images/SRR034450_PerBaseQuality.png)
+
+
+<h2 id="Header_2"> Sickle: Quality Control on raw reads</h2>
+
+The next step is to perform quality control on the reads using sickle. Since our reads are all unpaired reads, we indicate this with the se option in the sickle command. 
+<pre style="color: silver; background: black;">
+-f  flag designates the input file 
+-o  output file  
+-q  the minimum quality (sickle defaults to 20) and 
+-l  the minimum read length
+-t  flag designates the type of read</pre> 
+
+Unfortunately, despite the reads being Illumina reads, the average quality did not meet sickle's minimum for Illumina reads, hence the sanger option.
