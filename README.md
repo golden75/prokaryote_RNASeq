@@ -46,6 +46,12 @@ For more information on using the Xanadu cluster and SLURM please refer to our t
 FastQC can be used to give an impression of the quality of the data before any further analysis such as quality control. We will run FastQC over the command line on just one of the .fastq files for demonstration purposes.
 
 <pre style="color: silver; background: black;">
+fastqc [-o output dir] seqfile1
+
+    -o --outdir     Create all output files in the specified output directory
+</pre>
+
+<pre style="color: silver; background: black;">
 module load fastqc/0.11.5
 fastqc --outdir . ../raw_data/SRR034450.fastq
 fastqc --outdir . ../raw_data/SRR034451.fastq
@@ -54,7 +60,10 @@ fastqc --outdir . ../raw_data/SRR034453.fastq
 </pre>
 
 <pre style="color: silver; background: black;">
-fastqc [-o output dir] seqfile1
+fastqc_raw_data/
+├── SRR034450_fastqc.html
+├── SRR034451_fastqc.html
+├── SRR034452_fastqc.html
+└── SRR034453_fastqc.html</pre>
 
-    -o --outdir     Create all output files in the specified output directory
-</pre>
+Once the program finishes running, the output will include an html formatted statistics file with the name<span style="color: #339966;"> </span><span class="s1"><code><span style="color: #339966;">SRR034450_fastqc.html</span></code>. Copy this file to your desktop and open it with a web browser to view the contents, which will contain summary graphs and data such as the 'Per base sequence quality graph' below.
