@@ -149,3 +149,82 @@ reference_genome
 └── NC_003210.rnt</pre>
 
 Now we can run EDGE-pro to generate gene expression levels. The -g option takes a reference genome, -p flag a protein table, -r flag an rnt table, -u flag a fastq file (the trimmed file from sickle). The -o flag will be the prefix before each of the EDGE-pro output files, and the -s flag is the directory where the EDGE-pro executables are located.
+
+<pre style="color: silver; background: black;">
+useage:
+[OMP_NUM_THREADS=n] PATH/edge.perl [-g genome] [-p ptt] [-r rnt] [-u reads] [options]
+
+MANDATORY FILES:
+-g genome: fasta file containing bacterial genome
+-p ptt: ptt file with coordinates of coding genes, in Genbank format
+-r rnt: rnt file with coordinates of rRNAs and tRNAs, in Genbank format
+-u reads: fastq file of reads
+
+OPTIONAL FILES/PARAMETERS:
+-s source_dir: It is a string specifying the absolute of relative path to the directory that contains all scripts. Default: working directory.
+-o prefix: It is a string specifying the prefix of all output files</pre>
+
+The Edge-Pro program can be called using following method, and it will create rpkm files for each of the trimmed input fasta files.
+<pre style="color: silver; background: black;">
+module load EDGE_pro/1.3.1
+
+edge.pl -g ../reference_genome/NC_003210.fna \
+        -p ../reference_genome/NC_003210.ptt \
+        -r ../reference_genome/NC_003210.rnt \
+        -u ../sickle_quality_control/SRR034450_trimmed.fastq \
+        -o SRR034450.out \
+        -s /isg/shared/apps/EDGE_pro/1.3.1 \
+        -t 8
+
+edge.pl -g ../reference_genome/NC_003210.fna \
+        -p ../reference_genome/NC_003210.ptt \
+        -r ../reference_genome/NC_003210.rnt \
+        -u ../sickle_quality_control/SRR034451_trimmed.fastq \
+        -o SRR034451.out \
+        -s /isg/shared/apps/EDGE_pro/1.3.1 \
+        -t 8
+
+edge.pl -g ../reference_genome/NC_003210.fna \
+        -p ../reference_genome/NC_003210.ptt \
+        -r ../reference_genome/NC_003210.rnt \
+        -u ../sickle_quality_control/SRR034452_trimmed.fastq \
+        -o SRR034452.out \
+        -s /isg/shared/apps/EDGE_pro/1.3.1 \
+        -t 8
+
+edge.pl -g ../reference_genome/NC_003210.fna \
+        -p ../reference_genome/NC_003210.ptt \
+        -r ../reference_genome/NC_003210.rnt \
+        -u ../sickle_quality_control/SRR034453_trimmed.fastq \
+        -o SRR034453.out \
+        -s /isg/shared/apps/EDGE_pro/1.3.1 \
+        -t 8</pre>
+
+The above script is called <code>edgepro_rpkm.sh</code> and it can be located at <code>/UCHC/LABS/CBC/Tutorials/Listeria/edgepro_gene_expression</code>
+
+Edge-Pro program will execute and will be producing bunch of files for each run, and we are interested in the rpkm files it will produced. 
+<pre style="color: silver; background: black;">
+edgepro_gene_expression/
+├── SRR034450.out.alignments
+├── SRR034450.out.chrNum
+├── SRR034450.out.counts_0
+├── SRR034450.out.genes_0
+├── SRR034450.out.genomeSize
+├── SRR034450.out.index.1.bt2
+├── SRR034450.out.index.2.bt2
+├── SRR034450.out.index.3.bt2
+├── SRR034450.out.index.4.bt2
+├── SRR034450.out.index.rev.1.bt2
+├── SRR034450.out.index.rev.2.bt2
+├── SRR034450.out.multipleCounts_0
+├── SRR034450.out.numberMultiReads
+├── SRR034450.out.numberReads
+├── SRR034450.out.numberUniqueReads
+├── SRR034450.out.readLength
+├── SRR034450.out.rpkm_0
+├── SRR034450.out.rpkm.numberReads
+├── SRR034450.out.rRNA.numberReads
+└── SRR034450.out.uniqueCounts_0</pre>
+
+
+<h2 id="Header_7"> EDGE-pro to DESeq</h2>
