@@ -228,3 +228,18 @@ edgepro_gene_expression/
 
 
 <h2 id="Header_7"> EDGE-pro to DESeq</h2>
+The output we are interested in are the SRR03445X.out.rpkm_0 files. 
+So we will copy the \*.rpkm files from to our working directory. using
+<pre style="color: silver; background: black;">
+cp ../edgepro_gene_expression/\*.rpkm_0 . </pre>
+
+EDGE-pro comes with an accessory script to convert the rpkm files to a count table that DESeq2, the differential expression analysis R package, can take as input.
+<pre style="color: silver; background: black;">
+/isg/shared/apps/EDGE_pro/1.3.1/additionalScripts/edgeToDeseq.perl SRR034450.out.rpkm_0 SRR034451.out.rpkm_0 SRR034452.out.rpkm_0 SRR034453.out.rpkm_0</pre>
+
+Please note that EDGE-pro may sometimes create a second row for a gene with different count data than the first row. For our analysis with DESeq we desire each of the rows to be labeled with a gene ID, and this means that the list of genes must be unique. A python script was written to remove the duplicate row with the smallest total count. Writing this script is beyond the scope of this tutorial, but if you are interested, the script with comments is located at <code>//UCHC/LABS/CBC/Tutorials/Listeria/edgepro_to_DESeq2/trim_epro2deseq.py</code> This python script is executable globally so that you do not need to copy it to your own directory.  We will run the script as:
+<pre style="color: silver; background: black;">
+python trim_epro2deseq.py deseqFile
+</pre>
+
+where deseqFile is the intermediate output from edgeToDeseq.perl. The final, trimmed output table (a tab delimited file) is located at <code>/UCHC/LABS/CBC/Tutorials/Listeria/edgepro_to_DESeq2/Listeria_deseqFile</code>. The script to generate the file is located at <code>/UCHC/LABS/CBC/Tutorials/Listeria/edgepro_to_DESeq2/to_DESeq2.sh</code> and contains the commands to generate both the deseqFile and final Listeria_deseqFile.
