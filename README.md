@@ -217,7 +217,7 @@ edge.pl -g ../reference_genome/NC_003210.fna \
 
 The above script is called <code>edgepro_rpkm.sh</code> and it can be located at <code>/UCHC/PublicShare/RNASeq_Workshop/Listeria/edgepro_gene_expression</code>
 
-Edge-Pro program will execute and will be producing bunch of files for each run, and we are interested in the rpkm files it will produced. 
+Edge-Pro executes several steps in the analysis.  It will index the reference genome, align the reads to this indexed reference, and calculate RPKM values based on these alignments.  Edge-Pro using Bowtie as its aligner and it is optimizing the alignments for genes that do not contain introns.  We can move forward directly with the RPKM values into certain differential expression packages but since we will use DESeq2 which requires raw counts, we will convert these values back to raw counts for the analysis. 
 <pre style="color: silver; background: black;">
 edgepro_gene_expression/
 ├── SRR034450.out.alignments
