@@ -7,6 +7,9 @@ This repository is a usable, publicly available tutorial for analyzing different
 <p class="toc_title">Contents</p>
 <ul class="toc_list">
     <li><a href="#Header_1">Introduction and programs</>
+    <li><a href="#Header_2"> Download raw reads in fastq format: SRA Toolkit</>
+    <li><a href="#Header_3"> Checking the quality of the reads using FASTQC</>
+    <li><a href="Header_4"> Sickle: Quality Control on raw reads</>
 </ul>
 </div>
       
