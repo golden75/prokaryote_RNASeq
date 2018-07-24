@@ -48,7 +48,7 @@ fastq-dump SRR034451
 fastq-dump SRR034452
 fastq-dump SRR034453</pre>
 
-The converted reads are located in the <code>/UCHC/LABS/CBC/Tutorials/Listeria/raw_data</code>. The script used is located at: <code>/UCHC/LABS/CBC/Tutorials/Listeria/raw_data/sra_download.sh</code> Please note that this directory is write protected, meaning that the script will need to be run from a different directory. This is also the case for all scripts referenced throughout this tutorial - copy the scripts to a different directory before running them!
+The converted reads are located in the <code>/UCHC/PublicShare/RNASeq_Workshop/Listeria/raw_data</code>. The script used is located at: <code>/UCHC/PublicShare/RNASeq_Workshop/Listeria/raw_data/sra_download.sh</code> Please note that this directory is write protected, meaning that the script will need to be run from a different directory. This is also the case for all scripts referenced throughout this tutorial - copy the scripts to a different directory before running them!
 
 Since the fastqdump operation can be resource intensive, we will be submitting this script as a job to the cluster. Before doing so, replace the email in the line: <code><span style="color: #0000ff;">#SBATCH --mail-user= firstname.lastname@uconn.edu</span></code> with your own email. Then submit the script with the <code><span style="color: #339966;">sbatch</span></code> command:
 <pre style="color: silver; background: black;"> sbatch sra_download.sh </pre>
@@ -115,7 +115,7 @@ sickle se -f ../raw_data/SRR034451.fastq -t sanger -o SRR034451_trimmed.fastq
 sickle se -f ../raw_data/SRR034452.fastq -t sanger -o SRR034452_trimmed.fastq
 sickle se -f ../raw_data/SRR034453.fastq -t sanger -o SRR034453_trimmed.fastq</pre>
 
-The script is called `sickle_qc.sh` which can be found in `/UCHC/LABS/CBC/Tutorials/Listeria/sickle_quality_control` folder. Following the sickle run it will produce the trimmed read files:
+The script is called `sickle_qc.sh` which can be found in `//UCHC/PublicShare/RNASeq_Workshop/Listeria/sickle_quality_control` folder. Following the sickle run it will produce the trimmed read files:
 <pre style="color: silver; background: black;">
 sickle_quality_control/
 ├── SRR034450_trimmed.fastq
@@ -134,7 +134,7 @@ fastqc --outdir . ../sickle_quality_control/SRR034451_trimmed.fastq
 fastqc --outdir . ../sickle_quality_control/SRR034452_trimmed.fastq
 fastqc --outdir . ../sickle_quality_control/SRR034453_trimmed.fastq</pre>
 
-The above script is called `fastqc_trimmed.sh` and it is located at `/UCHC/LABS/CBC/Tutorials/Listeria/fastqc_trimmed_reads` This will produce the html files with statistics, which can be downloaded and viewed.
+The above script is called `fastqc_trimmed.sh` and it is located at `/UCHC/PublicShare/RNASeq_Workshop/Listeria/fastqc_trimmed_reads` This will produce the html files with statistics, which can be downloaded and viewed.
 <pre style="color: silver; background: black;">
 fastqc_trimmed_reads
 ├── SRR034450_trimmed_fastqc.html
@@ -156,7 +156,7 @@ wget http://genome2d.molgenrug.nl/Bacteria/Listeria_monocytogenes_EGD_e_uid61583
 wget http://genome2d.molgenrug.nl/Bacteria/Listeria_monocytogenes_EGD_e_uid61583/NC_003210.ptt
 wget http://genome2d.molgenrug.nl/Bacteria/Listeria_monocytogenes_EGD_e_uid61583/NC_003210.rnt</pre>
 
-Once downloaded, these files are located in `/UCHC/LABS/CBC/Tutorials/Listeria/reference_genome` folder in Xanadu server.
+Once downloaded, these files are located in `/UCHC/PublicShare/RNASeq_Workshop/Listeria/reference_genome` folder in Xanadu server.
 <pre style="color: silver; background: black;">
 reference_genome
 ├── NC_003210.fna
@@ -215,7 +215,7 @@ edge.pl -g ../reference_genome/NC_003210.fna \
         -s /isg/shared/apps/EDGE_pro/1.3.1 \
         -t 8</pre>
 
-The above script is called <code>edgepro_rpkm.sh</code> and it can be located at <code>/UCHC/LABS/CBC/Tutorials/Listeria/edgepro_gene_expression</code>
+The above script is called <code>edgepro_rpkm.sh</code> and it can be located at <code>/UCHC/PublicShare/RNASeq_Workshop/Listeria/edgepro_gene_expression</code>
 
 Edge-Pro program will execute and will be producing bunch of files for each run, and we are interested in the rpkm files it will produced. 
 <pre style="color: silver; background: black;">
@@ -246,18 +246,18 @@ edgepro_gene_expression/
 The output we are interested in are the SRR03445X.out.rpkm_0 files. 
 So we will copy the \*.rpkm files from to our working directory. using
 <pre style="color: silver; background: black;">
-cp ../edgepro_gene_expression/\*.rpkm_0 . </pre>
+cp ../edgepro_gene_expression/*.rpkm_0 . </pre>
 
 EDGE-pro comes with an accessory script to convert the rpkm files to a count table that DESeq2, the differential expression analysis R package, can take as input.
 <pre style="color: silver; background: black;">
 /isg/shared/apps/EDGE_pro/1.3.1/additionalScripts/edgeToDeseq.perl SRR034450.out.rpkm_0 SRR034451.out.rpkm_0 SRR034452.out.rpkm_0 SRR034453.out.rpkm_0</pre>
 
-Please note that EDGE-pro may sometimes create a second row for a gene with different count data than the first row. For our analysis with DESeq we desire each of the rows to be labeled with a gene ID, and this means that the list of genes must be unique. A python script was written to remove the duplicate row with the smallest total count. Writing this script is beyond the scope of this tutorial, but if you are interested, the script with comments is located at <code>//UCHC/LABS/CBC/Tutorials/Listeria/edgepro_to_DESeq2/trim_epro2deseq.py</code> This python script is executable globally so that you do not need to copy it to your own directory.  We will run the script as:
+Please note that EDGE-pro may sometimes create a second row for a gene with different count data than the first row. For our analysis with DESeq we desire each of the rows to be labeled with a gene ID, and this means that the list of genes must be unique. A python script was written to remove the duplicate row with the smallest total count. Writing this script is beyond the scope of this tutorial, but if you are interested, the script with comments is located at <code>/UCHC/PublicShare/RNASeq_Workshop/Listeria/edgepro_to_DESeq2/trim_epro2deseq.py</code> This python script is executable globally so that you do not need to copy it to your own directory.  We will run the script as:
 <pre style="color: silver; background: black;">
 python trim_epro2deseq.py deseqFile
 </pre>
 
-where deseqFile is the intermediate output from edgeToDeseq.perl. The final, trimmed output table (a tab delimited file) is located at <code>/UCHC/LABS/CBC/Tutorials/Listeria/edgepro_to_DESeq2/Listeria_deseqFile</code>. The script to generate the file is located at <code>/UCHC/LABS/CBC/Tutorials/Listeria/edgepro_to_DESeq2/to_DESeq2.sh</code> and contains the commands to generate both the deseqFile and final Listeria_deseqFile.
+where deseqFile is the intermediate output from edgeToDeseq.perl. The final, trimmed output table (a tab delimited file) is located at <code>/UCHC/PublicShare/RNASeq_Workshop/Listeria/edgepro_to_DESeq2/Listeria_deseqFile</code>. The script to generate the file is located at <code>/UCHC/PublicShare/RNASeq_Workshop/Listeria/edgepro_to_DESeq2/to_DESeq2.sh</code> and contains the commands to generate both the deseqFile and final Listeria_deseqFile.
 
 
 <h2 id="Header_8"> Analysis with DESeq</h2>
