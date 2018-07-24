@@ -243,3 +243,189 @@ python trim_epro2deseq.py deseqFile
 </pre>
 
 where deseqFile is the intermediate output from edgeToDeseq.perl. The final, trimmed output table (a tab delimited file) is located at <code>/UCHC/LABS/CBC/Tutorials/Listeria/edgepro_to_DESeq2/Listeria_deseqFile</code>. The script to generate the file is located at <code>/UCHC/LABS/CBC/Tutorials/Listeria/edgepro_to_DESeq2/to_DESeq2.sh</code> and contains the commands to generate both the deseqFile and final Listeria_deseqFile.
+
+
+<h2 id="Header_7"> Analysis with DESeq</h2>
+
+This step requires the R language and an IDE such as RStudio installed on a local machine. The R DESeq2 library also must be installed. To install this package, start the R console and enter:
+<pre style="color: silver; background: black;">
+source("http://bioconductor.org/biocLite.R")
+biocLite("DESeq2")</pre>
+
+If any dependencies fail, install them using the command: <code>install.packages(PackageName, repos='http://cran.rstudio.com/')</code>
+
+Before running this script make sure to set the working directory and path to your Listeria_deseqFile (after copying it from the server to your local machine). The script was adapted slightly from Dave Wheeler's comprehensive tutorial on analysis with DESeq2 located <a href="http://dwheelerau.com/2014/02/17/how-to-use-deseq2-to-analyse-rnaseq-data/">here</a>. The only changes were a few bug fixes, adding an outputPrefix variable to allow easy modification of the output file names in the code for future use, and adding filtering by adjusted p value.
+
+The most important information comes out as -replaceoutliers-results.csv. This file only contains the genes that have adjusted p values less than 0.05. These genes are the differentially expressed genes we are interested in. Depending on the experiment, this file can be adjusted to include p values less than 0.10 or a different value.
+<pre><span style="color: #339966;"># Load DESeq2 library
+</span><span style="color: #0000ff;">library</span>("DESeq2")<span style="color: #339966;">
+
+# Set the working directory</span>
+directory &lt;- "~/Documents/R/DESeq2/"
+setwd(directory)
+
+<span style="color: #339966;"># Set the prefix for each output file name</span>
+outputPrefix &lt;- "Listeria_DESeq2"
+
+<span style="color: #339966;"># Location of deseq ready count table (EDGE-pro output)</span>
+deseqFile &lt;- "~/Documents/R/DESeq2/Listeria_deseqFile"
+
+<span style="color: #339966;"># Read the table</span>
+countData &lt;- read.table(deseqFile, header = <span style="color: #0000ff;">T</span>)
+
+<span style="color: #339966;"># Replace accession numbers with meaningful names</span>
+names(countData) &lt;- c("10403S Rep1","DsigB Rep1","10403S Rep2","DsigB Rep2")
+
+<span style="color: #339966;"># Create table with treatment information</span>
+sampleNames &lt;- colnames(countData)
+sampleCondition &lt;- c("10403S","DsigB","10403S","DsigB")
+colData &lt;- data.frame(condition = sampleCondition)
+row.names(colData) = sampleNames
+treatments = c("10403S","DsigB")
+
+<span style="color: #339966;"># Create DESeqDataSet: countData is the count table, colData is the table with treatment information</span>
+<span style="color: #339966;"># One experimental condition</span>
+ddsFromMatrix &lt;- DESeqDataSetFromMatrix(countData = countData,
+ colData = colData,
+ design = ~ condition)
+colData(ddsFromMatrix)$condition &lt;- factor(colData(ddsFromMatrix)$condition, levels = treatments)
+dds &lt;- DESeq(ddsFromMatrix)
+res &lt;- results(dds)
+
+<span style="color: #339966;"># filter results by p value</span>
+<span style="color: #339966;"># order results by padj value (most significant to least)</span>
+res= subset(res, padj&lt;<span style="color: #0000ff;">0.05</span>)
+res &lt;- res[order(res$padj),]
+<span style="color: #339966;"># should see DataFrame of baseMean, log2Foldchange, stat, pval, padj</span>
+
+<span style="color: #339966;"># save data results and normalized reads to csv</span>
+resdata &lt;- merge(as.data.frame(res), as.data.frame(counts(dds,normalized =<span style="color: #0000ff;">TRUE</span>)), by = 'row.names', sort = FALSE)
+names(resdata)[<span style="color: #0000ff;">1</span>] &lt;- 'gene'
+write.csv(resdata, file = paste0(outputPrefix, "-results-with-normalized.csv"))
+
+<span style="color: #339966;"># send normalized counts to tab delimited file for GSEA, etc.</span>
+write.table(as.data.frame(counts(dds),normalized=<span style="color: #0000ff;">T</span>), file = paste0(outputPrefix, "_normalized_counts.txt"), sep = '\t')
+
+<span style="color: #339966;"># produce DataFrame of results of statistical tests</span>
+mcols(res, use.names = <span style="color: #0000ff;">T</span>)
+write.csv(as.data.frame(mcols(res, use.name = <span style="color: #0000ff;">T</span>)),file = paste0(outputPrefix, "-test-conditions.csv"))
+
+<span style="color: #339966;"># replacing outlier value with estimated value as predicted by distrubution using</span>
+<span style="color: #339966;"># "trimmed mean" approach. recommended if you have several replicates per treatment</span>
+<span style="color: #339966;"># DESeq2 will automatically do this if you have 7 or more replicates</span>
+ddsClean &lt;- replaceOutliersWithTrimmedMean(dds)
+ddsClean &lt;- DESeq(ddsClean)
+tab &lt;- table(initial = results(dds)$padj &lt; <span style="color: #0000ff;">0.05</span>,
+ cleaned = results(ddsClean)$padj &lt; <span style="color: #0000ff;">0.05</span>)
+addmargins(tab)
+write.csv(as.data.frame(tab),file = paste0(outputPrefix, "-replaceoutliers.csv"))
+resClean &lt;- results(ddsClean)
+
+<span style="color: #339966;"># filter results by p value</span>
+resClean = subset(res, padj&lt;<span style="color: #0000ff;">0.05</span>)
+resClean &lt;- resClean[order(resClean$padj),]
+write.csv(as.data.frame(resClean),file = paste0(outputPrefix, "-replaceoutliers-results.csv"))</pre>
+
+<pre><span style="color: #339966;">####################################################################################</span>
+<span style="color: #339966;"># Exploritory data analysis of RNAseq data with DESeq2</span>
+<span style="color: #339966;">#</span>
+<span style="color: #339966;"># these next R scripts are for a variety of visualization, QC and other plots to</span>
+<span style="color: #339966;"># get a sense of what the RNAseq data looks like based on DESEq2 analysis</span>
+<span style="color: #339966;">#</span>
+<span style="color: #339966;"># 1) MA plot</span>
+<span style="color: #339966;"># 2) rlog stabilization and variance stabiliazation</span>
+<span style="color: #339966;"># 3) variance stabilization plot</span>
+<span style="color: #339966;"># 4) heatmap of clustering analysis</span>
+<span style="color: #339966;"># 5) PCA plot</span>
+<span style="color: #339966;">#</span>
+<span style="color: #339966;">#</span>
+<span style="color: #339966;">####################################################################################</span>
+<span style="color: #339966;"># MA plot of RNAseq data for entire dataset</span>
+<span style="color: #339966;"># http://en.wikipedia.org/wiki/MA_plot</span>
+<span style="color: #339966;"># genes with padj &lt; 0.1 are colored Red</span>
+plotMA(dds, ylim=c(<span style="color: #0000ff;">-8,8</span>),main = "RNAseq experiment")
+dev.copy(png, paste0(outputPrefix, "-MAplot_initial_analysis.png"))
+dev.off()
+
+<span style="color: #339966;"># transform raw counts into normalized values</span>
+<span style="color: #339966;"># DESeq2 has two options: 1) rlog transformed and 2) variance stabilization</span>
+<span style="color: #339966;"># variance stabilization is very good for heatmaps, etc.</span>
+rld &lt;- rlogTransformation(dds, blind=<span style="color: #0000ff;">T</span>)
+vsd &lt;- varianceStabilizingTransformation(dds, blind=<span style="color: #0000ff;">T</span>)
+
+<span style="color: #339966;"># save normalized values</span>
+write.csv(as.data.frame(assay(rld)),file = paste0(outputPrefix, "-rlog-transformed-counts.txt"))
+write.csv(as.data.frame(assay(vsd)),file = paste0(outputPrefix, "-vst-transformed-counts.txt"))
+ 
+<span style="color: #339966;"># plot to show effect of transformation</span>
+<span style="color: #339966;"># axis is square root of variance over the mean for all samples</span>
+par(mai = ifelse(<span style="color: #0000ff;">1:4</span> &lt;= <span style="color: #0000ff;">2</span>, par('mai'),<span style="color: #0000ff;">0</span>))
+px &lt;- counts(dds)[,<span style="color: #0000ff;">1</span>] / sizeFactors(dds)[<span style="color: #0000ff;">1</span>]
+ord &lt;- order(px)
+ord &lt;- ord[px[ord] &lt; <span style="color: #0000ff;">150</span>]
+ord &lt;- ord[seq(1,length(ord),length=<span style="color: #0000ff;">50</span>)]
+last &lt;- ord[length(ord)]
+vstcol &lt;- c('blue','black')
+matplot(px[ord], cbind(assay(vsd)[,<span style="color: #0000ff;">1</span>], log2(px))[ord, ],type='l', lty = <span style="color: #0000ff;">1</span>, col=vstcol, xlab = 'n', ylab = 'f(n)')
+legend('bottomright',legend=c(expression('variance stabilizing transformation'), expression(log[<span style="color: #0000ff;">2</span>](n/s[<span style="color: #0000ff;">1</span>]))), fill=vstcol)
+dev.copy(png,paste0(outputPrefix, "-variance_stabilizing.png"))
+dev.off()
+
+<span style="color: #339966;">#Principal components plot shows clustering of samples</span>
+<span style="color: #0000ff;">library</span>("genefilter")
+<span style="color: #0000ff;">library</span>("ggplot2")
+<span style="color: #0000ff;">library</span>("grDevices")
+
+rv &lt;- rowVars(assay(rld))
+select &lt;- order(rv, decreasing=<span style="color: #0000ff;">T</span>)[seq_len(min(<span style="color: #0000ff;">500</span>,length(rv)))]
+pc &lt;- prcomp(t(assay(vsd)[select,]))
+
+<span style="color: #339966;"># set condition</span>
+condition &lt;- treatments
+scores &lt;- data.frame(pc$x, condition)
+
+(pcaplot &lt;- ggplot(scores, aes(x = PC1, y = PC2, col = (factor(condition)))) 
++ geom_point(size = <span style="color: #0000ff;">5</span>)
++ ggtitle("Principal Components")
++ scale_colour_brewer(name = " ", palette = "Set1")
++ theme(
+ plot.title = element_text(face = 'bold'),
+ legend.position = c(<span style="color: #0000ff;">.85,.87</span>),
+ legend.key = element_rect(fill = 'NA'),
+ legend.text = element_text(size = <span style="color: #0000ff;">10</span>, face = "bold"),
+ axis.text.y = element_text(colour = "Black"),
+ axis.text.x = element_text(colour = "Black"),
+ axis.title.x = element_text(face = "bold"),
+ axis.title.y = element_text(face = 'bold'),
+ panel.grid.major.x = element_blank(),
+ panel.grid.major.y = element_blank(),
+ panel.grid.minor.x = element_blank(),
+ panel.grid.minor.y = element_blank(),
+ panel.background = element_rect(color = 'black',fill = <span style="color: #0000ff;">NA</span>)
+))
+
+ggsave(pcaplot,file=paste0(outputPrefix, "-ggplot2.png"))
+
+<span style="color: #339966;"># scatter plot of rlog transformations between Sample conditions</span>
+<span style="color: #339966;"># nice way to compare control and experimental samples
+# uncomment plots depending on size of array</span>
+<span style="color: #339966;"># head(assay(rld))</span>
+plot(log2(1+counts(dds,normalized=T)[,1:2]),col='black',pch=20,cex=0.3, main='Log2 transformed')
+plot(assay(rld)[,1:2],col='#00000020',pch=20,cex=0.3, main = "rlog transformed")
+plot(assay(rld)[,3:4],col='#00000020',pch=20,cex=0.3, main = "rlog transformed")
+
+<span style="color: #339966;"># heatmap of data</span>
+<span style="color: #0000ff;">library</span>("RColorBrewer")
+<span style="color: #0000ff;">library</span>("gplots")
+<span style="color: #339966;"># 30 top expressed genes with heatmap.2</span>
+select &lt;- order(rowMeans(counts(ddsClean,normalized=<span style="color: #0000ff;">T</span>)),decreasing=T)[<span style="color: #0000ff;">1:30</span>]
+my_palette &lt;- colorRampPalette(c("blue",'white','red'))(n=<span style="color: #0000ff;">30</span>)
+heatmap.2(assay(vsd)[select,], col=my_palette,
+ scale="row", key=<span style="color: #0000ff;">T</span>, keysize=<span style="color: #0000ff;">1</span>, symkey=<span style="color: #0000ff;">T</span>,
+ density.info="none", trace="none",
+ cexCol=<span style="color: #0000ff;">0.6</span>, labRow=<span style="color: #0000ff;">F</span>,
+ main="TITLE")
+dev.copy(png, paste0(outputPrefix, "-HEATMAP.png"))
+dev.off()
+</pre>
+
