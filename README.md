@@ -9,7 +9,11 @@ This repository is a usable, publicly available tutorial for analyzing different
     <li><a href="#Header_1">Introduction and programs</>
     <li><a href="#Header_2"> Download raw reads in fastq format: SRA Toolkit</>
     <li><a href="#Header_3"> Checking the quality of the reads using FASTQC</>
-    <li><a href="Header_4"> Sickle: Quality Control on raw reads</>
+    <li><a href="#Header_4"> Sickle: Quality Control on raw reads</>
+    <li><a href="#Header_5"> Checking the quality of the trimmed reads using FASTQC</>
+    <li><a href="#Header_6"> EDGE-pro: Gene expression</>
+    <li><a href="#Header_7"> EDGE-pro to DESeq</>
+    <li><a href="#Header_8"> Analysis with DESeq</>
 </ul>
 </div>
       
@@ -256,7 +260,7 @@ python trim_epro2deseq.py deseqFile
 where deseqFile is the intermediate output from edgeToDeseq.perl. The final, trimmed output table (a tab delimited file) is located at <code>/UCHC/LABS/CBC/Tutorials/Listeria/edgepro_to_DESeq2/Listeria_deseqFile</code>. The script to generate the file is located at <code>/UCHC/LABS/CBC/Tutorials/Listeria/edgepro_to_DESeq2/to_DESeq2.sh</code> and contains the commands to generate both the deseqFile and final Listeria_deseqFile.
 
 
-<h2 id="Header_7"> Analysis with DESeq</h2>
+<h2 id="Header_8"> Analysis with DESeq</h2>
 
 This step requires the R language and an IDE such as RStudio installed on a local machine. The R DESeq2 library also must be installed. To install this package, start the R console and enter:
 <pre style="color: silver; background: black;">
