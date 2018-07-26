@@ -342,7 +342,7 @@ resClean &lt;- resClean[order(resClean$padj),]
 write.csv(as.data.frame(resClean),file = paste0(outputPrefix, "-replaceoutliers-results.csv"))</pre>
 
 <pre><span style="color: #339966;">####################################################################################</span>
-<span style="color: #339966;"># Exploritory data analysis of RNAseq data with DESeq2</span>
+<span style="color: #339966;"># Exploratory data analysis of RNAseq data with DESeq2</span>
 <span style="color: #339966;">#</span>
 <span style="color: #339966;"># these next R scripts are for a variety of visualization, QC and other plots to</span>
 <span style="color: #339966;"># get a sense of what the RNAseq data looks like based on DESEq2 analysis</span>
