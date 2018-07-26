@@ -361,7 +361,11 @@ write.csv(as.data.frame(resClean),file = paste0(outputPrefix, "-replaceoutliers-
 plotMA(dds, ylim=c(<span style="color: #0000ff;">-8,8</span>),main = "RNAseq experiment")
 dev.copy(png, paste0(outputPrefix, "-MAplot_initial_analysis.png"))
 dev.off()
+</pre>
 
+![](images/Listeria_DESeq2-MAplot_initial_analysis.png)
+
+<pre><span style="color: #339966;">
 <span style="color: #339966;"># transform raw counts into normalized values</span>
 <span style="color: #339966;"># DESeq2 has two options: 1) rlog transformed and 2) variance stabilization</span>
 <span style="color: #339966;"># variance stabilization is very good for heatmaps, etc.</span>
@@ -407,7 +411,10 @@ scores &lt;- data.frame(pc$x, condition)
 ))
 
 ggsave(pcaplot,file=paste0(outputPrefix, "-ggplot2.png"))
+</pre>
+![](images/Listeria_DESeq2-ggplot2.png)
 
+<pre><span style="color: #339966;">
 <span style="color: #339966;"># scatter plot of rlog transformations between Sample conditions</span>
 <span style="color: #339966;"># nice way to compare control and experimental samples
 # uncomment plots depending on size of array</span>
@@ -430,4 +437,4 @@ heatmap.2(assay(vsd)[select,], col=my_palette,
 dev.copy(png, paste0(outputPrefix, "-HEATMAP.png"))
 dev.off()
 </pre>
-
+![](images/Listeria_DESeq2-HEATMAP.png)
