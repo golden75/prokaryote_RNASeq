@@ -7,13 +7,13 @@ This repository is a usable, publicly available tutorial for analyzing different
 <p class="toc_title">Contents</p>
 <ul class="toc_list">
     <li><a href="#Header_1"> 1. Introduction and programs</>
-    <li><a href="#Header_2"> Download raw reads in fastq format: SRA Toolkit</>
-    <li><a href="#Header_3"> Checking the quality of the reads using FASTQC</>
-    <li><a href="#Header_4"> Sickle: Quality Control on raw reads</>
-    <li><a href="#Header_5"> Checking the quality of the trimmed reads using FASTQC</>
-    <li><a href="#Header_6"> EDGE-pro: Gene expression</>
-    <li><a href="#Header_7"> EDGE-pro to DESeq</>
-    <li><a href="#Header_8"> Analysis with DESeq</>
+    <li><a href="#Header_2"> 2. Download raw reads in fastq format: SRA Toolkit</>
+    <li><a href="#Header_3"> 3. Checking the quality of the reads using FASTQC</>
+    <li><a href="#Header_4"> 4. Sickle: Quality Control on raw reads</>
+    <li><a href="#Header_5"> 5. Checking the quality of the trimmed reads using FASTQC</>
+    <li><a href="#Header_6"> 6. EDGE-pro: Gene expression</>
+    <li><a href="#Header_7"> 7. EDGE-pro to DESeq</>
+    <li><a href="#Header_8"> 8. Analysis with DESeq</>
 </ul>
 </div>
       
@@ -39,7 +39,7 @@ This tutorial will serve as an introduction to analysis of prokaryote RNASeq da
 
 
 
-<h2 id="Header_2"> Download raw reads in fastq format: SRA Toolkit</h2>
+<h2 id="Header_2"> 2. Download raw reads in fastq format: SRA Toolkit</h2>
 The first step is to retrieve the biological sequence data from the <a href="https://www.ncbi.nlm.nih.gov/sra">Sequence Read Archive</a>. The data that we will be using is from this <a href="https://www.ncbi.nlm.nih.gov/bioproject/PRJNA116667">experiment</a>, which analyzes two strains of Listeria monocytogenes (10403S and DsigB) with two replicates per strain, resulting in a total of four raw read files. We will use the <span style="color: #339966;">fastq-dump</span> utility from the SRA toolkit to download the raw files by accession number into fastq format. This format is necessary because the software used to perform quality control, Sickle, requires fastq files as input.
 
 <pre style="color: silver; background: black;">module load sratoolkit/2.8.1
@@ -57,7 +57,7 @@ For more information on using the Xanadu cluster and SLURM please refer to our t
 
 
 
-<h2 id="Header_3"> Checking the quality of the reads using FASTQC</h2>
+<h2 id="Header_3"> 3. Checking the quality of the reads using FASTQC</h2>
 FastQC can be used to give an impression of the quality of the data before any further analysis such as quality control. We will run FastQC over the command line on just one of the .fastq files for demonstration purposes.
 
 <pre style="color: silver; background: black;">
@@ -89,7 +89,7 @@ Copy this file to your desktop and open it with a web browser to view the conten
 ![](images/SRR034450_PerBaseQuality.png)
 
 
-<h2 id="Header_4"> Sickle: Quality Control on raw reads</h2>
+<h2 id="Header_4"> 4. Sickle: Quality Control on raw reads</h2>
 
 The next step is to perform quality control on the reads using sickle. Since our reads are all unpaired reads, we indicate this with the se option in the sickle command. 
 <pre style="color: silver; background: black;">
@@ -124,7 +124,7 @@ sickle_quality_control/
 └── SRR034453_trimmed.fastq</pre>
 
 
-<h2 id="Header_5"> Checking the quality of the trimmed reads using FASTQC</h2>
+<h2 id="Header_5"> 5. Checking the quality of the trimmed reads using FASTQC</h2>
 Now we will use the FASTQC tools to check the quality of reads after trimming.
 <pre style="color: silver; background: black;">
 module load fastqc/0.11.5
@@ -145,7 +145,7 @@ fastqc_trimmed_reads
 ![](images/SRR034450_trimmed_perbase_quality.png)
 
 
-<h2 id="Header_6"> EDGE-pro: Gene expression</h2>
+<h2 id="Header_6"> 6. EDGE-pro: Gene expression</h2>
 
 Before we get started with EDGE-pro, we need to retrieve the Listeria reference genome and its protein and rna tables. By searching the NCBI genome database, we learn that the <a href="http://www.ncbi.nlm.nih.gov/genome/159">EGD-e strain is the reference genome</a>. We will use NCBI's ftp website: <a href="ftp://ftp.ncbi.nih.gov/">ftp://ftp.ncbi.nih.gov/</a> to download the files. Since Listeria is a bacterial genome, navigate to the genome directory then bacteria directory. Note that there are multiple genomes for Listeria -- navigate to the EGD-e assembly: <a href="ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Listeria_monocytogenes_EGD_e_uid61583/">ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Listeria_monocytogenes_EGD_e_uid61583/</a>
 
@@ -242,7 +242,7 @@ edgepro_gene_expression/
 └── SRR034450.out.uniqueCounts_0</pre>
 
 
-<h2 id="Header_7"> EDGE-pro to DESeq</h2>
+<h2 id="Header_7"> 7. EDGE-pro to DESeq</h2>
 The output we are interested in are the SRR03445X.out.rpkm_0 files. 
 So we will copy the \*.rpkm files from to our working directory. using
 <pre style="color: silver; background: black;">
@@ -260,7 +260,7 @@ python trim_epro2deseq.py deseqFile
 where deseqFile is the intermediate output from edgeToDeseq.perl. The final, trimmed output table (a tab delimited file) is located at <code>/UCHC/PublicShare/RNASeq_Workshop/Listeria/edgepro_to_DESeq2/Listeria_deseqFile</code>. The script to generate the file is located at <code>/UCHC/PublicShare/RNASeq_Workshop/Listeria/edgepro_to_DESeq2/to_DESeq2.sh</code> and contains the commands to generate both the deseqFile and final Listeria_deseqFile.
 
 
-<h2 id="Header_8"> Analysis with DESeq</h2>
+<h2 id="Header_8"> 8. Analysis with DESeq</h2>
 
 This step requires the R language and an IDE such as RStudio installed on a local machine. The R DESeq2 library also must be installed. To install this package, start the R console and enter:
 <pre style="color: silver; background: black;">
