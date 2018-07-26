@@ -6,7 +6,7 @@ This repository is a usable, publicly available tutorial for analyzing different
 <div id="toc_container">
 <p class="toc_title">Contents</p>
 <ul class="toc_list">
-    <li><a href="#Header_1">Introduction and programs</>
+    <li><a href="#Header_1"> 1. Introduction and programs</>
     <li><a href="#Header_2"> Download raw reads in fastq format: SRA Toolkit</>
     <li><a href="#Header_3"> Checking the quality of the reads using FASTQC</>
     <li><a href="#Header_4"> Sickle: Quality Control on raw reads</>
@@ -18,7 +18,7 @@ This repository is a usable, publicly available tutorial for analyzing different
 </div>
       
 
-<h2 id="Header_1">Introduction and programs</h2>
+<h2 id="Header_1">1. Introduction and programs</h2>
 This tutorial will serve as an introduction to analysis of prokaryote RNASeq data with an associated reference genome. The tools used for this analysis strictly consist of freeware and open-source software - any bioinformatician can perform the following analysis without any licenses!   
 
 <strong>Software download links:</strong>
