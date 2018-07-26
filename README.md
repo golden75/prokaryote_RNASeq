@@ -269,7 +269,7 @@ biocLite("DESeq2")</pre>
 
 If any dependencies fail, install them using the command: <code>install.packages(PackageName, repos='http://cran.rstudio.com/')</code>
 
-Before running this script make sure to set the working directory and path to your Listeria_deseqFile (after copying it from the server to your local machine). The script was adapted slightly from Dave Wheeler's comprehensive tutorial on analysis with DESeq2 located <a href="http://dwheelerau.com/2014/02/17/how-to-use-deseq2-to-analyse-rnaseq-data/">here</a>. The only changes were a few bug fixes, adding an outputPrefix variable to allow easy modification of the output file names in the code for future use, and adding filtering by adjusted p value.
+Before running this script make sure to set the working directory and path to your Listeria_deseqFile (after copying it from the server to your local machine). The script was adapted slightly from Dave Wheeler's comprehensive tutorial on analysis with DESeq2. The only changes were a few bug fixes, adding an outputPrefix variable to allow easy modification of the output file names in the code for future use, and adding filtering by adjusted p value.
 
 The most important information comes out as -replaceoutliers-results.csv. This file only contains the genes that have adjusted p values less than 0.05. These genes are the differentially expressed genes we are interested in. Depending on the experiment, this file can be adjusted to include p values less than 0.10 or a different value.
 <pre><span style="color: #339966;"># Load DESeq2 library
