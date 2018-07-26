@@ -37,6 +37,17 @@ This tutorial will serve as an introduction to analysis of prokaryote RNASeq da
 
 <a href="http://bioconductor.org/packages/release/bioc/html/DESeq2.html">DESeq2</a>
 
+The folder strucutre for the analysis is as follows:
+<pre style="color: silver; background: black;">
+Listeria
+├── raw_data
+├── fastqc_raw_data
+├── sickle_quality_control
+├── fastqc_trimmed_reads
+├── reference_genome
+├── edgepro_gene_expression
+└── edgepro_to_DESeq2
+</pre>
 
 
 <h2 id="Header_2"> 2. Download raw reads in fastq format: SRA Toolkit</h2>
