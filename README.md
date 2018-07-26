@@ -349,12 +349,12 @@ write.csv(as.data.frame(resClean),file = paste0(outputPrefix, "-replaceoutliers-
 <span style="color: #339966;">#</span>
 <span style="color: #339966;"># 1) MA plot</span>
 <span style="color: #339966;"># 2) rlog stabilization and variance stabiliazation</span>
-<span style="color: #339966;"># 3) variance stabilization plot</span>
-<span style="color: #339966;"># 4) heatmap of clustering analysis</span>
-<span style="color: #339966;"># 5) PCA plot</span>
+<span style="color: #339966;"># 3) heatmap of clustering analysis</span>
+<span style="color: #339966;"># 4) PCA plot</span>
 <span style="color: #339966;">#</span>
 <span style="color: #339966;">#</span>
 <span style="color: #339966;">####################################################################################</span>
+
 <span style="color: #339966;"># MA plot of RNAseq data for entire dataset</span>
 <span style="color: #339966;"># http://en.wikipedia.org/wiki/MA_plot</span>
 <span style="color: #339966;"># genes with padj &lt; 0.1 are colored Red</span>
@@ -371,20 +371,7 @@ vsd &lt;- varianceStabilizingTransformation(dds, blind=<span style="color: #0000
 <span style="color: #339966;"># save normalized values</span>
 write.csv(as.data.frame(assay(rld)),file = paste0(outputPrefix, "-rlog-transformed-counts.txt"))
 write.csv(as.data.frame(assay(vsd)),file = paste0(outputPrefix, "-vst-transformed-counts.txt"))
- 
-<span style="color: #339966;"># plot to show effect of transformation</span>
-<span style="color: #339966;"># axis is square root of variance over the mean for all samples</span>
-par(mai = ifelse(<span style="color: #0000ff;">1:4</span> &lt;= <span style="color: #0000ff;">2</span>, par('mai'),<span style="color: #0000ff;">0</span>))
-px &lt;- counts(dds)[,<span style="color: #0000ff;">1</span>] / sizeFactors(dds)[<span style="color: #0000ff;">1</span>]
-ord &lt;- order(px)
-ord &lt;- ord[px[ord] &lt; <span style="color: #0000ff;">150</span>]
-ord &lt;- ord[seq(1,length(ord),length=<span style="color: #0000ff;">50</span>)]
-last &lt;- ord[length(ord)]
-vstcol &lt;- c('blue','black')
-matplot(px[ord], cbind(assay(vsd)[,<span style="color: #0000ff;">1</span>], log2(px))[ord, ],type='l', lty = <span style="color: #0000ff;">1</span>, col=vstcol, xlab = 'n', ylab = 'f(n)')
-legend('bottomright',legend=c(expression('variance stabilizing transformation'), expression(log[<span style="color: #0000ff;">2</span>](n/s[<span style="color: #0000ff;">1</span>]))), fill=vstcol)
-dev.copy(png,paste0(outputPrefix, "-variance_stabilizing.png"))
-dev.off()
+
 
 <span style="color: #339966;">#Principal components plot shows clustering of samples</span>
 <span style="color: #0000ff;">library</span>("genefilter")
