@@ -49,11 +49,41 @@ Listeria
 └── edgepro_to_DESeq2
 </pre>
 
+In this tutorial, we are using the UConn Xanadu cluster, which has a SLURM scheduler. 
+The scripts are composed of a header part which is written specifically the clusters scheduler, 
+which in this case is the SLURM scheduler. (You may have the change the header of the script depending on your scheduler.) 
+<pre style="color: silver; background: black;">#!/bin/bash
+#SBATCH --job-name=jobName   # name of your script
+#SBATCH -n 1                 # number of Task to run
+#SBATCH -N 1                 # number of nodes 
+#SBATCH -c 1                 # number of processors 
+#SBATCH --mem=5G             # memory required for the job
+#SBATCH --partition=general  # SLURM partition
+#SBATCH --qos=general        # SLURM qos
+#SBATCH --mail-type=ALL      # mailing options
+#SBATCH --mail-user=first.last@uconn.edu
+#SBATCH -o %x_%j.out         # output file name
+#SBATCH -e %x_%j.err         # error file name</pre>
+
+If you need more information on the Xanadu and its batch script options please refer to our <a href="https://bioinformatics.uconn.edu/resources-and-events/tutorials-2/xanadu/">Understanding Xanadu HPC Resources website</a>.
 
 <h2 id="Header_2"> 2. Download raw reads in fastq format: SRA Toolkit</h2>
 The first step is to retrieve the biological sequence data from the <a href="https://www.ncbi.nlm.nih.gov/sra">Sequence Read Archive</a>. The data that we will be using is from this <a href="https://www.ncbi.nlm.nih.gov/bioproject/PRJNA116667">experiment</a>, which analyzes two strains of Listeria monocytogenes (10403S and DsigB) with two replicates per strain, resulting in a total of four raw read files. We will use the <span style="color: #339966;">fastq-dump</span> utility from the SRA toolkit to download the raw files by accession number into fastq format. This format is necessary because the software used to perform quality control, Sickle, requires fastq files as input.
 
-<pre style="color: silver; background: black;">module load sratoolkit/2.8.1
+<pre style="color: silver; background: black;">#!/bin/bash
+#SBATCH --job-name=sra_download
+#SBATCH -n 1
+#SBATCH -N 1
+#SBATCH -c 1
+#SBATCH --mem=5G
+#SBATCH --partition=general
+#SBATCH --qos=general
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=first.last@uconn.edu
+#SBATCH -o %x_%j.out
+#SBATCH -e %x_%j.err
+
+module load sratoolkit/2.8.1
 fastq-dump SRR034450
 fastq-dump SRR034451
 fastq-dump SRR034452
@@ -78,6 +108,20 @@ fastqc [-o output dir] seqfile1
 </pre>
 
 <pre style="color: silver; background: black;">
+#!/bin/bash
+#SBATCH --job-name=fastqc_raw
+#SBATCH -n 1
+#SBATCH -N 1
+#SBATCH -c 1
+#SBATCH --mem=5G
+#SBATCH --partition=general
+#SBATCH --qos=general
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=first.last@uconn.edu
+#SBATCH -o %x_%j.out
+#SBATCH -e %x_%j.err
+
+echo `hostname`
 module load fastqc/0.11.5
 fastqc --outdir . ../raw_data/SRR034450.fastq
 fastqc --outdir . ../raw_data/SRR034451.fastq
@@ -119,6 +163,20 @@ Options:
 Unfortunately, despite the reads being Illumina reads, the average quality did not meet sickle's minimum for Illumina reads, hence the sanger option.
 
 <pre style="color: silver; background: black;">
+#!/bin/bash
+#SBATCH --job-name=sickle_qc
+#SBATCH -n 1
+#SBATCH -N 1
+#SBATCH -c 1
+#SBATCH --mem=5G
+#SBATCH --partition=cbcworkshop
+#SBATCH --qos=cbcworkshop
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=first.last@uconn.edu
+#SBATCH -o %x_%j.out
+#SBATCH -e %x_%j.err
+
+echo `hostname`
 module load sickle/1.33
 
 sickle se -f ../raw_data/SRR034450.fastq -t sanger -o SRR034450_trimmed.fastq
@@ -138,6 +196,19 @@ sickle_quality_control/
 <h2 id="Header_5"> 5. Checking the quality of the trimmed reads using FASTQC</h2>
 Now we will use the FASTQC tools to check the quality of reads after trimming.
 <pre style="color: silver; background: black;">
+#!/bin/bash
+#SBATCH --job-name=fastqc_trimmed
+#SBATCH -n 1
+#SBATCH -N 1
+#SBATCH -c 1
+#SBATCH --mem=5G
+#SBATCH --partition=general
+#SBATCH --qos=general
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=first.last@uconn.edu
+#SBATCH -o %x_%j.out
+#SBATCH -e %x_%j.err   
+
 module load fastqc/0.11.5
 
 fastqc --outdir . ../sickle_quality_control/SRR034450_trimmed.fastq
@@ -192,6 +263,20 @@ OPTIONAL FILES/PARAMETERS:
 
 The Edge-Pro program can be called using following method, and it will create rpkm files for each of the trimmed input fasta files.
 <pre style="color: silver; background: black;">
+#!/bin/bash
+#SBATCH --job-name=edgepro_rpkm
+#SBATCH -n 1
+#SBATCH -N 1
+#SBATCH -c 8
+#SBATCH --mem=20G
+#SBATCH --partition=cbcworkshop
+#SBATCH --qos=cbcworkshop
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=first.last@uconn.edu
+#SBATCH -o %x_%j.out
+#SBATCH -e %x_%j.err
+
+echo `hostname`
 module load EDGE_pro/1.3.1
 
 edge.pl -g ../reference_genome/NC_003210.fna \
