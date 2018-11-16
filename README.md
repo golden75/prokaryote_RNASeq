@@ -207,8 +207,7 @@ Now we will use the FASTQC tools to check the quality of reads after trimming.
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=first.last@uconn.edu
 #SBATCH -o %x_%j.out
-#SBATCH -e %x_%j.err
-
+#SBATCH -e %x_%j.err   
 
 module load fastqc/0.11.5
 
