@@ -139,7 +139,7 @@ fastqc_raw_data/
 ├── SRR034452_fastqc.html
 └── SRR034453_fastqc.html</pre>
 
-Copy this file to your desktop and open it with a web browser to view the contents, which will contain summary graphs and data such as the 'Per base sequence quality graph' below.
+Copy this file to your desktop and open it with a web browser to view the contents, which will contain summary graphs and data such as the 'Per base sequence quality graph' below. You will need to use an sFTP client to move files to you local computer for viewing.  On Xanadu, you will also use a different hostname for this connection with the same login credentials.  Details can be found in the cluster guide <a href="https://bioinformatics.uconn.edu/resources-and-events/tutorials-2/data-transfer/">here</a>.
 
 ![](images/SRR034450_PerBaseQuality.png)
 
