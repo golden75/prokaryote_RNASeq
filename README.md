@@ -454,12 +454,12 @@ write.csv(as.data.frame(resClean),file = paste0(outputPrefix, "-replaceoutliers-
 <span style="color: #339966;"># MA plot of RNAseq data for entire dataset</span>
 <span style="color: #339966;"># http://en.wikipedia.org/wiki/MA_plot</span>
 <span style="color: #339966;"># genes with padj &lt; 0.1 are colored Red</span>
-plotMA(dds, ylim=c(<span style="color: #0000ff;">-8,8</span>),main = "RNAseq experiment")
+plotMA(dds, ylim=c(<span style="color: #0000ff;">-8,8</span>),main = "RNAseq Listeria monocytogenes")
 dev.copy(png, paste0(outputPrefix, "-MAplot_initial_analysis.png"))
 dev.off()
 </pre>
 
-![](images/Listeria_DESeq2-MAplot_initial_analysis.png)
+![](images/Listeria_DESeq2-MAplot_initial_analysis_2.png)
 
 <pre><span style="color: #339966;">
 <span style="color: #339966;"># transform raw counts into normalized values</span>
