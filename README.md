@@ -533,4 +533,4 @@ heatmap.2(assay(vsd)[select,], col=my_palette,
 dev.copy(png, paste0(outputPrefix, "-HEATMAP.png"))
 dev.off()
 </pre>
-![](images/Listeria_DESeq2-HEATMAP.png)
+![](images/DESeq_githubListeria_DESeq2heatmap.png)
