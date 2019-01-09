@@ -192,6 +192,37 @@ sickle_quality_control/
 ├── SRR034452_trimmed.fastq
 └── SRR034453_trimmed.fastq</pre>
 
+During the sickle run it will output the summary of each fastq file which indicates the total number of records, number of records it kept and number of records it discarded. This information will be written to the .out file during the run.
+<pre style="color: silver; background: black;">
+xanadu-10.cam.uchc.edu
+
+SE input file: ../raw_data/SRR034450.fastq
+
+Total FastQ records: 3489648
+FastQ records kept: 2282100
+FastQ records discarded: 1207548
+
+
+SE input file: ../raw_data/SRR034451.fastq
+
+Total FastQ records: 3316959
+FastQ records kept: 3074420
+FastQ records discarded: 242539
+
+
+SE input file: ../raw_data/SRR034452.fastq
+
+Total FastQ records: 4240141
+FastQ records kept: 3759552
+FastQ records discarded: 480589
+
+
+SE input file: ../raw_data/SRR034453.fastq
+
+Total FastQ records: 5246743
+FastQ records kept: 4018652
+FastQ records discarded: 1228091</pre>
+
 
 <h2 id="Header_5"> 5. Checking the quality of the trimmed reads using FASTQC</h2>
 Now we will use the FASTQC tools to check the quality of reads after trimming.
