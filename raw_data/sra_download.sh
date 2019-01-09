@@ -4,8 +4,8 @@
 #SBATCH -N 1
 #SBATCH -c 1
 #SBATCH --mem=5G
-#SBATCH --partition=cbcworkshop
-#SBATCH --qos=cbcworkshop
+#SBATCH --partition=general
+#SBATCH --qos=general
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=first.last@uconn.edu
 #SBATCH -o %x_%j.out
