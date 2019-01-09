@@ -299,6 +299,11 @@ reference_genome
 ├── NC_003210.ptt
 └── NC_003210.rnt</pre>
 
+
+<pre style="color: silver; background: black;">
+Working Directory:
+<strong>edgepro_gene_expression/</strong>
+</pre>
 Now we can run EDGE-pro to generate gene expression levels. The -g option takes a reference genome, -p flag a protein table, -r flag an rnt table, -u flag a fastq file (the trimmed file from sickle). The -o flag will be the prefix before each of the EDGE-pro output files, and the -s flag is the directory where the EDGE-pro executables are located.
 
 <pre style="color: silver; background: black;">
