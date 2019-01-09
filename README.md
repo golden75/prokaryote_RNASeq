@@ -265,11 +265,29 @@ Before we get started with EDGE-pro, we need to retrieve the Listeria reference
 The reference genome is stored in the .fna file, protein table in the .ptt file, and rna table in the .rnt file. We will use the wget command line utility to download these files.
 
 <pre style="color: silver; background: black;">
+#!/bin/bash
+#SBATCH --job-name=genome
+#SBATCH -n 1
+#SBATCH -N 1
+#SBATCH -c 1
+#SBATCH --mem=5G
+#SBATCH --partition=general
+#SBATCH --qos=general
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=first.last@uconn.edu
+#SBATCH -o %x_%j.out
+#SBATCH -e %x_%j.err
+
+echo `hostname`
+
+#################################################################
+# Download the reference files
+#################################################################
 wget http://genome2d.molgenrug.nl/Bacteria/Listeria_monocytogenes_EGD_e_uid61583/NC_003210.fna
 wget http://genome2d.molgenrug.nl/Bacteria/Listeria_monocytogenes_EGD_e_uid61583/NC_003210.ptt
 wget http://genome2d.molgenrug.nl/Bacteria/Listeria_monocytogenes_EGD_e_uid61583/NC_003210.rnt</pre>
 
-Once downloaded, these files are located in `/UCHC/PublicShare/RNASeq_Workshop/Listeria/reference_genome` folder in Xanadu server.
+Once downloaded, these files are located in `/UCHC/PublicShare/RNASeq_Workshop/Listeria/reference_genome` folder in Xanadu server. The full script to download the genome reference files is called `genome.sh` 
 <pre style="color: silver; background: black;">
 reference_genome
 ├── NC_003210.fna
