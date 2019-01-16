@@ -91,6 +91,7 @@ fastq-dump SRR034450
 fastq-dump SRR034451
 fastq-dump SRR034452
 fastq-dump SRR034453
+mv SRR034453 /$HOME/CAM/$USER/new.fasta
 ```
 
 The full scrip it called sra_download.sh. The converted reads are located in the <code>/UCHC/PublicShare/RNASeq_Workshop/Listeria/raw_data</code>. The script used is located at: <code>/UCHC/PublicShare/RNASeq_Workshop/Listeria/raw_data/sra_download.sh</code> Please note that this directory is write protected, meaning that the script will need to be run from a different directory. This is also the case for all scripts referenced throughout this tutorial - copy the scripts to a different directory before running them!
