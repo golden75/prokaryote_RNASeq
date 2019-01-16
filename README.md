@@ -72,7 +72,8 @@ If you need more information on the Xanadu and its batch script options please r
 <h2 id="Header_2"> 2. Download raw reads in fastq format: SRA Toolkit</h2>
 The first step is to retrieve the biological sequence data from the <a href="https://www.ncbi.nlm.nih.gov/sra">Sequence Read Archive</a>. The data that we will be using is from this <a href="https://www.ncbi.nlm.nih.gov/bioproject/PRJNA116667">experiment</a>, which analyzes two strains of Listeria monocytogenes (10403S and DsigB) with two replicates per strain, resulting in a total of four raw read files. We will use the <span style="color: #339966;">fastq-dump</span> utility from the SRA toolkit to download the raw files by accession number into fastq format. This format is necessary because the software used to perform quality control, Sickle, requires fastq files as input.
 
-<pre style="color: silver; background: black;">#!/bin/bash
+```bash
+#!/bin/bash
 #SBATCH --job-name=sra_download
 #SBATCH -n 1
 #SBATCH -N 1
@@ -89,7 +90,8 @@ module load sratoolkit/2.8.1
 fastq-dump SRR034450
 fastq-dump SRR034451
 fastq-dump SRR034452
-fastq-dump SRR034453</pre>
+fastq-dump SRR034453
+```
 
 The full scrip it called sra_download.sh. The converted reads are located in the <code>/UCHC/PublicShare/RNASeq_Workshop/Listeria/raw_data</code>. The script used is located at: <code>/UCHC/PublicShare/RNASeq_Workshop/Listeria/raw_data/sra_download.sh</code> Please note that this directory is write protected, meaning that the script will need to be run from a different directory. This is also the case for all scripts referenced throughout this tutorial - copy the scripts to a different directory before running them!
 
