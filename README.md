@@ -52,7 +52,8 @@ Listeria
 In this tutorial, we are using the UConn Xanadu cluster, which has a SLURM scheduler. 
 The scripts are composed of a header part which is written specifically the clusters scheduler, 
 which in this case is the SLURM scheduler. (You may have the change the header of the script depending on your scheduler.) 
-<pre style="color: silver; background: black;">#!/bin/bash
+```bash
+#!/bin/bash
 #SBATCH --job-name=jobName   # name of your script
 #SBATCH -n 1                 # number of Task to run
 #SBATCH -N 1                 # number of nodes 
@@ -63,7 +64,8 @@ which in this case is the SLURM scheduler. (You may have the change the header o
 #SBATCH --mail-type=ALL      # mailing options
 #SBATCH --mail-user=first.last@uconn.edu
 #SBATCH -o %x_%j.out         # output file name
-#SBATCH -e %x_%j.err         # error file name</pre>
+#SBATCH -e %x_%j.err         # error file name
+```
 
 If you need more information on the Xanadu and its batch script options please refer to our <a href="https://bioinformatics.uconn.edu/resources-and-events/tutorials-2/xanadu/">Understanding Xanadu HPC Resources website</a>.
 
