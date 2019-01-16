@@ -502,133 +502,66 @@ resClean = subset(res, padj<0.05)
 resClean <- resClean[order(resClean$padj),]
 write.csv(as.data.frame(resClean),file = paste0(outputPrefix, "-replaceoutliers-results.csv"))
 ```
-<pre><span style="color: #339966;"># Load DESeq2 library
-</span><span style="color: #0000ff;">library</span>("DESeq2")<span style="color: #339966;">
 
-# Set the working directory</span>
-directory &lt;- "~/Documents/R/DESeq2/"
-setwd(directory)
+```R
+####################################################################################
+# Exploratory data analysis of RNAseq data with DESeq2
+#
+# these next R scripts are for a variety of visualization, QC and other plots to
+# get a sense of what the RNAseq data looks like based on DESEq2 analysis
+#
+# 1) MA plot
+# 2) rlog stabilization and variance stabiliazation
+# 3) heatmap of clustering analysis
+# 4) PCA plot
+#
+#
+####################################################################################
 
-<span style="color: #339966;"># Set the prefix for each output file name</span>
-outputPrefix &lt;- "Listeria_DESeq2"
-
-<span style="color: #339966;"># Location of deseq ready count table (EDGE-pro output)</span>
-deseqFile &lt;- "~/Documents/R/DESeq2/Listeria_deseqFile"
-
-<span style="color: #339966;"># Read the table</span>
-countData &lt;- read.table(deseqFile, header = <span style="color: #0000ff;">T</span>)
-
-<span style="color: #339966;"># Replace accession numbers with meaningful names</span>
-names(countData) &lt;- c("10403S Rep1","DsigB Rep1","10403S Rep2","DsigB Rep2")
-
-<span style="color: #339966;"># Create table with treatment information</span>
-sampleNames &lt;- colnames(countData)
-sampleCondition &lt;- c("10403S","DsigB","10403S","DsigB")
-colData &lt;- data.frame(condition = sampleCondition)
-row.names(colData) = sampleNames
-treatments = c("10403S","DsigB")
-
-<span style="color: #339966;"># Create DESeqDataSet: countData is the count table, colData is the table with treatment information</span>
-<span style="color: #339966;"># One experimental condition</span>
-ddsFromMatrix &lt;- DESeqDataSetFromMatrix(countData = countData,
- colData = colData,
- design = ~ condition)
-colData(ddsFromMatrix)$condition &lt;- factor(colData(ddsFromMatrix)$condition, levels = treatments)
-dds &lt;- DESeq(ddsFromMatrix)
-res &lt;- results(dds)
-
-<span style="color: #339966;"># filter results by p value</span>
-<span style="color: #339966;"># order results by padj value (most significant to least)</span>
-res= subset(res, padj&lt;<span style="color: #0000ff;">0.05</span>)
-res &lt;- res[order(res$padj),]
-<span style="color: #339966;"># should see DataFrame of baseMean, log2Foldchange, stat, pval, padj</span>
-
-<span style="color: #339966;"># save data results and normalized reads to csv</span>
-resdata &lt;- merge(as.data.frame(res), as.data.frame(counts(dds,normalized =<span style="color: #0000ff;">TRUE</span>)), by = 'row.names', sort = FALSE)
-names(resdata)[<span style="color: #0000ff;">1</span>] &lt;- 'gene'
-write.csv(resdata, file = paste0(outputPrefix, "-results-with-normalized.csv"))
-
-<span style="color: #339966;"># send normalized counts to tab delimited file for GSEA, etc.</span>
-write.table(as.data.frame(counts(dds),normalized=<span style="color: #0000ff;">T</span>), file = paste0(outputPrefix, "_normalized_counts.txt"), sep = '\t')
-
-<span style="color: #339966;"># produce DataFrame of results of statistical tests</span>
-mcols(res, use.names = <span style="color: #0000ff;">T</span>)
-write.csv(as.data.frame(mcols(res, use.name = <span style="color: #0000ff;">T</span>)),file = paste0(outputPrefix, "-test-conditions.csv"))
-
-<span style="color: #339966;"># replacing outlier value with estimated value as predicted by distrubution using</span>
-<span style="color: #339966;"># "trimmed mean" approach. recommended if you have several replicates per treatment</span>
-<span style="color: #339966;"># DESeq2 will automatically do this if you have 7 or more replicates</span>
-ddsClean &lt;- replaceOutliersWithTrimmedMean(dds)
-ddsClean &lt;- DESeq(ddsClean)
-tab &lt;- table(initial = results(dds)$padj &lt; <span style="color: #0000ff;">0.05</span>,
- cleaned = results(ddsClean)$padj &lt; <span style="color: #0000ff;">0.05</span>)
-addmargins(tab)
-write.csv(as.data.frame(tab),file = paste0(outputPrefix, "-replaceoutliers.csv"))
-resClean &lt;- results(ddsClean)
-
-<span style="color: #339966;"># filter results by p value</span>
-resClean = subset(res, padj&lt;<span style="color: #0000ff;">0.05</span>)
-resClean &lt;- resClean[order(resClean$padj),]
-write.csv(as.data.frame(resClean),file = paste0(outputPrefix, "-replaceoutliers-results.csv"))</pre>
-
-<pre><span style="color: #339966;">####################################################################################</span>
-<span style="color: #339966;"># Exploratory data analysis of RNAseq data with DESeq2</span>
-<span style="color: #339966;">#</span>
-<span style="color: #339966;"># these next R scripts are for a variety of visualization, QC and other plots to</span>
-<span style="color: #339966;"># get a sense of what the RNAseq data looks like based on DESEq2 analysis</span>
-<span style="color: #339966;">#</span>
-<span style="color: #339966;"># 1) MA plot</span>
-<span style="color: #339966;"># 2) rlog stabilization and variance stabiliazation</span>
-<span style="color: #339966;"># 3) heatmap of clustering analysis</span>
-<span style="color: #339966;"># 4) PCA plot</span>
-<span style="color: #339966;">#</span>
-<span style="color: #339966;">#</span>
-<span style="color: #339966;">####################################################################################</span>
-
-<span style="color: #339966;"># MA plot of RNAseq data for entire dataset</span>
-<span style="color: #339966;"># http://en.wikipedia.org/wiki/MA_plot</span>
-<span style="color: #339966;"># genes with padj &lt; 0.1 are colored Red</span>
-plotMA(dds, ylim=c(<span style="color: #0000ff;">-8,8</span>),main = "RNAseq Listeria monocytogenes")
+# MA plot of RNAseq data for entire dataset
+# http://en.wikipedia.org/wiki/MA_plot
+# genes with padj < 0.1 are colored Red
+plotMA(dds, ylim=c(-8,8),main = "RNAseq Listeria monocytogenes")
 dev.copy(png, paste0(outputPrefix, "-MAplot_initial_analysis.png"))
 dev.off()
-</pre>
+```
 
 ![](images/Listeria_DESeq2-MAplot_initial_analysis_2.png)
 
-<pre><span style="color: #339966;">
-<span style="color: #339966;"># transform raw counts into normalized values</span>
-<span style="color: #339966;"># DESeq2 has two options: 1) rlog transformed and 2) variance stabilization</span>
-<span style="color: #339966;"># variance stabilization is very good for heatmaps, etc.</span>
-rld &lt;- rlogTransformation(dds, blind=<span style="color: #0000ff;">T</span>)
-vsd &lt;- varianceStabilizingTransformation(dds, blind=<span style="color: #0000ff;">T</span>)
+```R
+# transform raw counts into normalized values
+# DESeq2 has two options: 1) rlog transformed and 2) variance stabilization
+# variance stabilization is very good for heatmaps, etc.
+rld <- rlogTransformation(dds, blind=T)
+vsd <- varianceStabilizingTransformation(dds, blind=T)
 
-<span style="color: #339966;"># save normalized values</span>
+# save normalized values
 write.csv(as.data.frame(assay(rld)),file = paste0(outputPrefix, "-rlog-transformed-counts.txt"))
 write.csv(as.data.frame(assay(vsd)),file = paste0(outputPrefix, "-vst-transformed-counts.txt"))
 
 
-<span style="color: #339966;">#Principal components plot shows clustering of samples</span>
-<span style="color: #0000ff;">library</span>("genefilter")
-<span style="color: #0000ff;">library</span>("ggplot2")
-<span style="color: #0000ff;">library</span>("grDevices")
+#Principal components plot shows clustering of samples
+library("genefilter")
+library("ggplot2")
+library("grDevices")
 
-rv &lt;- rowVars(assay(rld))
-select &lt;- order(rv, decreasing=<span style="color: #0000ff;">T</span>)[seq_len(min(<span style="color: #0000ff;">500</span>,length(rv)))]
-pc &lt;- prcomp(t(assay(vsd)[select,]))
+rv <- rowVars(assay(rld))
+select <- order(rv, decreasing=T)[seq_len(min(500,length(rv)))]
+pc <- prcomp(t(assay(vsd)[select,]))
 
-<span style="color: #339966;"># set condition</span>
-condition &lt;- treatments
-scores &lt;- data.frame(pc$x, condition)
+# set condition
+condition <- treatments
+scores <- data.frame(pc$x, condition)
 
-(pcaplot &lt;- ggplot(scores, aes(x = PC1, y = PC2, col = (factor(condition)))) 
-+ geom_point(size = <span style="color: #0000ff;">5</span>)
+(pcaplot <- ggplot(scores, aes(x = PC1, y = PC2, col = (factor(condition)))) 
++ geom_point(size = 5)
 + ggtitle("Principal Components")
 + scale_colour_brewer(name = " ", palette = "Set1")
 + theme(
  plot.title = element_text(face = 'bold'),
- legend.position = c(<span style="color: #0000ff;">.85,.87</span>),
+ legend.position = c(.85,.87),
  legend.key = element_rect(fill = 'NA'),
- legend.text = element_text(size = <span style="color: #0000ff;">10</span>, face = "bold"),
+ legend.text = element_text(size = 10, face = "bold"),
  axis.text.y = element_text(colour = "Black"),
  axis.text.x = element_text(colour = "Black"),
  axis.title.x = element_text(face = "bold"),
@@ -637,34 +570,36 @@ scores &lt;- data.frame(pc$x, condition)
  panel.grid.major.y = element_blank(),
  panel.grid.minor.x = element_blank(),
  panel.grid.minor.y = element_blank(),
- panel.background = element_rect(color = 'black',fill = <span style="color: #0000ff;">NA</span>)
+ panel.background = element_rect(color = 'black',fill = NA)
 ))
 
 ggsave(pcaplot,file=paste0(outputPrefix, "-ggplot2.png"))
-</pre>
+```
+
 ![](images/Listeria_DESeq2-ggplot2.png)
 
-<pre><span style="color: #339966;">
-<span style="color: #339966;"># scatter plot of rlog transformations between Sample conditions</span>
-<span style="color: #339966;"># nice way to compare control and experimental samples
-# uncomment plots depending on size of array</span>
-<span style="color: #339966;"># head(assay(rld))</span>
+```R
+# scatter plot of rlog transformations between Sample conditions
+# nice way to compare control and experimental samples
+# uncomment plots depending on size of array
+# head(assay(rld))
 plot(log2(1+counts(dds,normalized=T)[,1:2]),col='black',pch=20,cex=0.3, main='Log2 transformed')
 plot(assay(rld)[,1:2],col='#00000020',pch=20,cex=0.3, main = "rlog transformed")
 plot(assay(rld)[,3:4],col='#00000020',pch=20,cex=0.3, main = "rlog transformed")
 
-<span style="color: #339966;"># heatmap of data</span>
-<span style="color: #0000ff;">library</span>("RColorBrewer")
-<span style="color: #0000ff;">library</span>("gplots")
-<span style="color: #339966;"># 30 top expressed genes with heatmap.2</span>
-select &lt;- order(rowMeans(counts(ddsClean,normalized=<span style="color: #0000ff;">T</span>)),decreasing=T)[<span style="color: #0000ff;">1:30</span>]
-my_palette &lt;- colorRampPalette(c("blue",'white','red'))(n=<span style="color: #0000ff;">30</span>)
+# heatmap of data
+library("RColorBrewer")
+library("gplots")
+# 30 top expressed genes with heatmap.2
+select <- order(rowMeans(counts(ddsClean,normalized=T)),decreasing=T)[1:30]
+my_palette <- colorRampPalette(c("blue",'white','red'))(n=30)
 heatmap.2(assay(vsd)[select,], col=my_palette,
- scale="row", key=<span style="color: #0000ff;">T</span>, keysize=<span style="color: #0000ff;">1</span>, symkey=<span style="color: #0000ff;">T</span>,
+ scale="row", key=T, keysize=1, symkey=T,
  density.info="none", trace="none",
- cexCol=<span style="color: #0000ff;">0.6</span>, labRow=<span style="color: #0000ff;">F</span>,
+ cexCol=0.6, labRow=F,
  main="TITLE")
 dev.copy(png, paste0(outputPrefix, "-HEATMAP.png"))
 dev.off()
-</pre>
+```
+
 ![](images/DESeq_githubListeria_DESeq2heatmap.png)
