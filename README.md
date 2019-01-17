@@ -236,6 +236,7 @@ FastQ records discarded: 1228091
 
 <h2 id="Header_5"> 5. Checking the quality of the trimmed reads using FASTQC</h2>
 Now we will use the FASTQC tools to check the quality of reads after trimming.
+
 ```bash
 #!/bin/bash
 #SBATCH --job-name=fastqc_trimmed
