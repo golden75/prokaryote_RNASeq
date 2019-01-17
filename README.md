@@ -153,7 +153,7 @@ Copy this file to your desktop and open it with a web browser to view the conten
 <h2 id="Header_4"> 4. Sickle: Quality Control on raw reads</h2>
 
 The next step is to perform quality control on the reads using sickle. Since our reads are all unpaired reads, we indicate this with the se option in the sickle command. 
-```
+```bash
 Usage: sickle se [options] -f [fastq sequence file] -t [quality type] -o [trimmed fastq file]
 
 Command:
@@ -277,7 +277,7 @@ Before we get started with EDGE-pro, we need to retrieve the Listeria reference
 
 ```
 Working Directory:
-<strong>reference_genome/</strong>
+**reference_genome/**
 ```
 
 The reference genome is stored in the .fna file, protein table in the .ptt file, and rna table in the .rnt file. We will use the wget command line utility to download these files.
