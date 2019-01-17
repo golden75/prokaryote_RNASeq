@@ -418,8 +418,9 @@ edgepro_gene_expression/
 <h2 id="Header_7"> 7. EDGE-pro to DESeq</h2>
 The output we are interested in are the SRR03445X.out.rpkm_0 files. 
 So we will copy the \*.rpkm files from to our working directory. using
+
 ```bash
-cp ../edgepro_gene_expression/*.rpkm_0 . 
+cp ../edgepro_gene_expression/*.rpkm_0 .  
 ```
 
 EDGE-pro comes with an accessory script to convert the rpkm files to a count table that DESeq2, the differential expression analysis R package, can take as input.
